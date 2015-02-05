@@ -58,7 +58,7 @@ public class BogoPicGenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		setBogoPic();
+		setBogoPic(); //initialize with starting picture
 
 		ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
 		OnClickListener listener = new OnClickListener() {
@@ -90,11 +90,11 @@ public class BogoPicGenActivity extends Activity {
 
 	private void setBogoPic() {
 		// TODO: Show a toast with message "Generating Photo"
-		
-		
+		Toast.makeText(this,"Generating photo!!", Toast.LENGTH_LONG).show();
+		ourBMP = BogoPicGen.generateBitmap(400, 400);
 		// TODO: Get a reference to the image button
-		
-		
+		ImageButton preview = (ImageButton)findViewById(R.id.TakeAPhoto);
+		preview.setImageBitmap(ourBMP);
 		// Generate a bogopic
 		ourBMP = BogoPicGen.generateBitmap(400, 400);
 		
@@ -113,11 +113,15 @@ public class BogoPicGenActivity extends Activity {
 			if (intent.getExtras() != null) {
 				// TODO: If cancelled, show a toast, set result to RESULT_CANCELED, finish and return 
 				
-				
+				if(cancel == true){
+					setResult(RESULT_CANCELED);
+					Toast.makeText(this, "Cancelled :(",Toast.LENGTH_LONG).show();
+				}else{
 				// If accepted save the picture
 				File intentPicture = getPicturePath(intent);
 				saveBMP(intentPicture, ourBMP);
-				
+				setResult(RESULT_OK);
+				}
 				// TODO: set result to RESULT_OK
 				
 			} else {
